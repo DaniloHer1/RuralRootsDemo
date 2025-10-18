@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
 
+import 'services/auth_service.dart';
 import 'services/cart_service.dart';
 import 'services/user_service.dart';
 import 'screens/splash_screen.dart';
@@ -17,6 +18,9 @@ void main() async {
   // Cargar variables de entorno
   await dotenv.load(fileName: ".env");
   
+  // Inicializar el servicio de autenticación
+  AuthService().initialize();
+  
   runApp(const MainApp());
 }
 
@@ -27,8 +31,20 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => CartService()),
-        ChangeNotifierProvider(create: (_) => UserService()),
+        // ✅ AuthService como singleton con ChangeNotifier
+        ChangeNotifierProvider<AuthService>.value(
+          value: AuthService(),
+        ),
+        
+        // CartService
+        ChangeNotifierProvider(
+          create: (_) => CartService(),
+        ),
+        
+        // UserService
+        ChangeNotifierProvider(
+          create: (_) => UserService(),
+        ),
       ],
       child: Builder(
         builder: (context) => MaterialApp.router(

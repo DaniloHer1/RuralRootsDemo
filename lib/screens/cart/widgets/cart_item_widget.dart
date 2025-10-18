@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rural_roots_demo1/core/utils/currency_formater.dart';
 import '../../../services/cart_service.dart';
 import '../../../themes/app_colors.dart';
 import '../../../themes/app_text_styles.dart';
-import '../../../core/utils/currency_formatter.dart';
 
 class CartItemWidget extends StatelessWidget {
   final CartItem item;

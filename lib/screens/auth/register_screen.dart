@@ -19,7 +19,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
-  
+
   String? selectedRole;
   bool _isLoading = false;
 
@@ -82,7 +82,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 40),
-
                     Container(
                       width: 100,
                       height: 100,
@@ -95,9 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 40),
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24),
                       child: Container(
@@ -127,28 +124,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                               ),
                               const SizedBox(height: 16),
-
                               TextFormField(
                                 controller: _nameController,
                                 style: AppTextStyles.body,
                                 decoration: InputDecoration(
                                   labelText: "Nombre completo",
-                                  labelStyle: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                                  labelStyle: AppTextStyles.body
+                                      .copyWith(color: AppColors.textSecondary),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.border),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.border),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.border),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.border),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.primaryGreen, width: 2),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.primaryGreen,
+                                        width: 2),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: Colors.red),
+                                    borderSide:
+                                        const BorderSide(color: Colors.red),
                                   ),
                                 ),
                                 validator: (value) {
@@ -159,49 +161,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                               ),
                               const SizedBox(height: 16),
-
                               TextFormField(
                                 controller: _emailController,
                                 keyboardType: TextInputType.emailAddress,
                                 style: AppTextStyles.body,
                                 decoration: InputDecoration(
                                   labelText: "Correo electrónico",
-                                  labelStyle: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                                  labelStyle: AppTextStyles.body
+                                      .copyWith(color: AppColors.textSecondary),
                                   hintText: "tu@email.com",
                                   hintStyle: AppTextStyles.bodySecondary,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.border),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.border),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.border),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.border),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.primaryGreen, width: 2),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.primaryGreen,
+                                        width: 2),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: Colors.red),
+                                    borderSide:
+                                        const BorderSide(color: Colors.red),
                                   ),
                                 ),
-                              validator: (value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Por favor ingresa tu email';
-    }
-    
-    final emailRegex = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    );
-    if (!emailRegex.hasMatch(value)) {
-      return 'Email inválido';
-    }
-    return null;
-  },
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return 'Por favor ingresa tu email';
+                                  }
+
+                                  final emailRegex = RegExp(
+                                      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+                                  if (!emailRegex.hasMatch(value)) {
+                                    return 'Email inválido';
+                                  }
+                                  return null;
+                                },
                               ),
                               const SizedBox(height: 16),
-
                               TextFormField(
                                 controller: _phoneController,
                                 keyboardType: TextInputType.phone,
@@ -212,7 +217,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ],
                                 decoration: InputDecoration(
                                   labelText: "Teléfono móvil",
-                                  labelStyle: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                                  labelStyle: AppTextStyles.body
+                                      .copyWith(color: AppColors.textSecondary),
                                   hintText: "600123456",
                                   hintStyle: AppTextStyles.bodySecondary,
                                   prefixText: "+34 ",
@@ -221,19 +227,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.border),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.border),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.border),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.border),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.primaryGreen, width: 2),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.primaryGreen,
+                                        width: 2),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: Colors.red),
+                                    borderSide:
+                                        const BorderSide(color: Colors.red),
                                   ),
                                 ),
                                 validator: (value) {
@@ -247,29 +258,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 },
                               ),
                               const SizedBox(height: 16),
-
                               TextFormField(
                                 controller: _passwordController,
                                 obscureText: true,
                                 style: AppTextStyles.body,
                                 decoration: InputDecoration(
                                   labelText: "Contraseña",
-                                  labelStyle: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                                  labelStyle: AppTextStyles.body
+                                      .copyWith(color: AppColors.textSecondary),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.border),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.border),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.border),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.border),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: AppColors.primaryGreen, width: 2),
+                                    borderSide: const BorderSide(
+                                        color: AppColors.primaryGreen,
+                                        width: 2),
                                   ),
                                   errorBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(color: Colors.red),
+                                    borderSide:
+                                        const BorderSide(color: Colors.red),
                                   ),
                                 ),
                                 validator: (value) {
@@ -282,7 +298,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   return null;
                                 },
                               ),
-
                               const SizedBox(height: 24),
                               Text(
                                 "Selecciona tu tipo de usuario:",
@@ -292,16 +307,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                               ),
                               const SizedBox(height: 12),
-
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   _buildRoleButton("Agricultor", "agricultor"),
                                   _buildRoleButton("Comprador", "comprador"),
                                 ],
                               ),
                               const SizedBox(height: 24),
-
                               ElevatedButton(
                                 onPressed: _isLoading ? null : _handleRegister,
                                 style: AppButtonStyles.primary.copyWith(
@@ -324,7 +338,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                       ),
                               ),
                               const SizedBox(height: 12),
-
                               GestureDetector(
                                 onTap: () {
                                   Navigator.pop(context);
@@ -354,7 +367,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 40),
                   ],
                 ),

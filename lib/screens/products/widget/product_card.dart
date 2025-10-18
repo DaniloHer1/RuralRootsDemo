@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../models/product.dart';
 import '../../../../themes/app_colors.dart';
 import '../../../../themes/app_text_styles.dart';
-import '../../../../core/utils/currency_formatter.dart';
+import '../../../../core/utils/currency_formater.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;

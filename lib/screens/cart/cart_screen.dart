@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:rural_roots_demo1/screens/cart/widgets/farmer_group_widget.dart';
 import 'package:rural_roots_demo1/shared/widget/custom_button.dart';
 import 'package:rural_roots_demo1/shared/widget/empty_state.dart';
 import '../../../services/cart_service.dart';
 import '../../../themes/app_colors.dart';
 import '../../../themes/app_text_styles.dart';
-import '../../../themes/app_decorations.dart';
+import '../cart/widgets/cart_bottom_bar.dart';
 
 
 
@@ -99,7 +99,7 @@ class CartScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    _CartBottomBar(cartService: cartService),
+                    CartBottomBar(cartService: cartService),
                   ],
                 ),
         );

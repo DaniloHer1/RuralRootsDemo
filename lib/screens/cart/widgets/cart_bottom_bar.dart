@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:rural_roots_demo1/services/cart_service.dart';
-import 'package:rural_roots_demo1/themes/app_colors.dart';
-import 'package:rural_roots_demo1/themes/app_text_styles.dart';
-import 'package:rural_roots_demo1/shared/widget/custom_button.dart';
+import 'package:rural_roots_demo1/core/utils/currency_formater.dart';
 
-class _CartBottomBar extends StatelessWidget {
+import '../../../services/cart_service.dart';
+import '../../../themes/app_colors.dart';
+import '../../../themes/app_text_styles.dart';
+import '../../../shared/widget/custom_button.dart';
+
+
+/// Barra inferior del carrito que muestra el total y botón de checkout
+class CartBottomBar extends StatelessWidget {
   final CartService cartService;
 
-  const _CartBottomBar({required this.cartService});
+  const CartBottomBar({
+    super.key,
+    required this.cartService,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +35,15 @@ class _CartBottomBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // Total
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Total', style: AppTextStyles.bodySecondary),
+                Text(
+                  'Total',
+                  style: AppTextStyles.bodySecondary,
+                ),
                 const SizedBox(height: 4),
                 Text(
                   CurrencyFormatter.format(cartService.totalAmount),
@@ -43,10 +54,15 @@ class _CartBottomBar extends StatelessWidget {
                 ),
               ],
             ),
+            
+            // Botón de checkout
             CustomButton(
               text: 'Hacer Pedido',
               icon: Icons.arrow_forward,
-              onPressed: () => context.push('/checkout'),
+              onPressed: () {
+                // Navegar a checkout
+                context.push('/checkout');
+              },
             ),
           ],
         ),

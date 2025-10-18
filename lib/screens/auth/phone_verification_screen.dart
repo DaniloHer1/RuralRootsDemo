@@ -60,8 +60,8 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
 
   void _sendVerificationCode() {
     _generatedCode = (100000 + (900000 * (DateTime.now().millisecond / 1000)).round()).toString();
+  
     
-    print('📱 Código de verificación enviado: $_generatedCode');
     
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:rural_roots_demo1/core/constants/app_constants.dart';
 import 'package:rural_roots_demo1/core/errors/error_handler.dart';
+import 'package:rural_roots_demo1/core/errors/failures.dart';
+import 'package:rural_roots_demo1/core/utils/validators.dart';
+import 'package:rural_roots_demo1/services/auth_service.dart';
+import 'package:rural_roots_demo1/services/user_service.dart';
 import 'package:rural_roots_demo1/shared/widget/custom_button.dart';
 import 'package:rural_roots_demo1/shared/widget/custom_text_field.dart';
 import 'package:rural_roots_demo1/shared/widget/loading_overlay.dart';
-import '../../../services/auth_service.dart';
-import '../../../services/user_service.dart';
-import '../../../core/errors/failures.dart';
-import '../../../core/utils/validators.dart';
-import '../../../themes/app_colors.dart';
-import '../../../themes/app_text_styles.dart';
+import 'package:rural_roots_demo1/themes/app_colors.dart';
+import 'package:rural_roots_demo1/themes/app_text_styles.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,16 +25,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
   
-  late final AuthService _authService;
   bool _isLoading = false;
   bool _obscurePassword = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _authService = AuthService(baseUrl: AppConstants.apiBaseUrl);
-  }
 
   @override
   void dispose() {
@@ -42,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _handleLogin() async {
+    // Validar formulario
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -49,35 +46,45 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final user = await _authService.login(
+      
+      final authService = context.read<AuthService>();
+      
+      // Intentar hacer login
+      final user = await authService.login(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
 
       if (!mounted) return;
 
-      // Actualizar el estado del usuario
+      // Actualizar el estado del usuario en UserService
       context.read<UserService>().setUser(user);
 
       // Navegar a la pantalla principal
       context.go('/main');
       
       // Mostrar mensaje de éxito
-      ErrorHandler.showSuccess(context, '¡Bienvenido ${user.name}!');
+      if (mounted) {
+        ErrorHandler.showSuccess(context, '¡Bienvenido ${user.name}!');
+      }
       
     } on AuthFailure catch (e) {
+      // Error de autenticación (credenciales incorrectas)
       if (mounted) {
         ErrorHandler.showError(context, e);
       }
     } on NetworkFailure catch (e) {
+      // Error de red (sin internet, servidor caído)
       if (mounted) {
         ErrorHandler.showError(context, e, onRetry: _handleLogin);
       }
     } catch (e) {
+      // Error desconocido
       if (mounted) {
         ErrorHandler.showError(context, const UnknownFailure());
       }
     } finally {
+      // Ocultar indicador de carga
       if (mounted) {
         setState(() => _isLoading = false);
       }
@@ -140,26 +147,29 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: AppColors.primaryGreen,
                             ),
                           ),
+
                           const SizedBox(height: 24),
 
-                          // Email
+                          // Campo de email
                           CustomTextField(
                             controller: _emailController,
                             label: "Correo electrónico",
-                            hint: "tu@email.com",
-                            icon: Icons.email_outlined,
+                            hint: "ejemplo@email.com",
+                            prefixIcon: Icons.email_outlined,
                             keyboardType: TextInputType.emailAddress,
-                            validator: Validators.email,
+                            validator: Validators.validateEmail,
+                            textInputAction: TextInputAction.next,
                           ),
+
                           const SizedBox(height: 16),
 
-                          // Password
+                          // Campo de contraseña
                           CustomTextField(
                             controller: _passwordController,
                             label: "Contraseña",
-                            icon: Icons.lock_outlined,
+                            hint: "Tu contraseña",
+                            prefixIcon: Icons.lock_outline,
                             obscureText: _obscurePassword,
-                            validator: Validators.password,
                             suffixIcon: IconButton(
                               icon: Icon(
                                 _obscurePassword
@@ -173,18 +183,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                 });
                               },
                             ),
+                            validator: Validators.validatePassword,
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (_) => _handleLogin(),
                           ),
-                          const SizedBox(height: 8),
 
-                          // Olvidé mi contraseña
+                          const SizedBox(height: 12),
+
+                          // Enlace a "¿Olvidaste tu contraseña?"
                           Align(
                             alignment: Alignment.centerRight,
                             child: TextButton(
                               onPressed: () {
                                 // TODO: Implementar recuperación de contraseña
-                                ErrorHandler.showWarning(
-                                  context,
-                                  'Función en desarrollo',
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Función en desarrollo'),
+                                  ),
                                 );
                               },
                               child: Text(
@@ -195,6 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
+
                           const SizedBox(height: 16),
 
                           // Botón de login
@@ -204,6 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             isLoading: _isLoading,
                             expanded: true,
                           ),
+
                           const SizedBox(height: 16),
 
                           // Enlace a registro
@@ -238,7 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Texto inferior
                   Text(
-                    "Productos frescos directamente del campo a tu mesa",
+                    AppConstants.appDescription,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.bodySecondary.copyWith(
                       color: AppColors.primaryGreen,

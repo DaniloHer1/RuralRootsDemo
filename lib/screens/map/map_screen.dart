@@ -389,16 +389,14 @@ class _MapScreenState extends State<MapScreen> {
                                           style: AppTextStyles.buttonText.copyWith(fontSize: 13),
                                         ),
                                       ),
-                                      if (_userService.isComprador)
+                                      if (_userService.isBuyer)
                                         ElevatedButton.icon(
                                           onPressed: () {
                                             _cartService.addItem(
-                                              productId: '${product['name']}_${farmer['id']}',
-                                              productName: product['name'],
-                                              farmerName: farmer['name'],
+                                              product: product['name'],
+                                             farmerName: farmer['name'],
                                               farmerId: farmer['id'],
-                                              price: product['price'],
-                                              unit: 'kg',
+                                             
                                             );
                                             
                                             Navigator.pop(context);
@@ -665,7 +663,7 @@ class _MapScreenState extends State<MapScreen> {
             ),
           ),
 
-          if (_userService.isComprador)
+          if (_userService.isBuyer)
             Positioned(
               bottom: 90,
               right: 16,

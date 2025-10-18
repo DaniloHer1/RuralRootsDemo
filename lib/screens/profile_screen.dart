@@ -1,11 +1,8 @@
 // lib/screens/profile_screen.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; 
+
 import 'package:rural_roots_demo1/services/user_service.dart';
-import 'package:rural_roots_demo1/screens/products/add_product_screen.dart';
-import 'package:rural_roots_demo1/screens/products/my_products_screen.dart';
-import 'package:rural_roots_demo1/screens/orders/my_orders_screen.dart';
-import 'package:rural_roots_demo1/screens/orders/received_order_screen.dart';
-import 'package:rural_roots_demo1/themes/app_buttons_styles.dart';
 import 'package:rural_roots_demo1/themes/app_colors.dart';
 import 'package:rural_roots_demo1/themes/app_text_styles.dart';
 
@@ -19,27 +16,38 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final UserService _userService = UserService();
+  
 
   @override
   void initState() {
     super.initState();
-    _userService.addListener(_onUserChanged);
+  
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userService = Provider.of<UserService>(context, listen: false);
+      userService.addListener(_onUserChanged);
+    });
   }
 
   @override
   void dispose() {
-    _userService.removeListener(_onUserChanged);
+    
+    final userService = Provider.of<UserService>(context, listen: false);
+    userService.removeListener(_onUserChanged);
     super.dispose();
   }
 
   void _onUserChanged() {
-    setState(() {});
+    // Actualizar la UI cuando cambie el usuario
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isAgricultor = _userService.isAgricultor;
+   
+    final userService = context.watch<UserService>();
+    final isAgricultor = userService.isFarmer;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -53,8 +61,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: AppColors.textPrimary),
-            onPressed: () {},
+            icon: const Icon(
+              Icons.notifications_outlined,
+              color: AppColors.textPrimary,
+            ),
+            onPressed: () {
+              // TODO: Implementar notificaciones
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Función en desarrollo')),
+              );
+            },
           ),
         ],
       ),
@@ -63,6 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             const SizedBox(height: 20),
 
+            // Card de perfil
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.all(20),
@@ -79,6 +96,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               child: Row(
                 children: [
+                  // Avatar
                   Container(
                     width: 60,
                     height: 60,
@@ -94,35 +112,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(width: 16),
 
+                  // Información del usuario
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _userService.name,
+                          userService.currentUser?.name ?? 'Usuario',
                           style: AppTextStyles.subheadline,
                         ),
                         const SizedBox(height: 4),
-                        Text(
-                          isAgricultor ? 'Agricultora desde 2018' : 'Comprador',
-                          style: AppTextStyles.bodySecondary,
-                        ),
-                        const SizedBox(height: 8),
                         Row(
                           children: [
-                            const Icon(Icons.star, color: AppColors.accentOrange, size: 16),
-                            const SizedBox(width: 4),
-                            Text(
-                              '4.9',
-                              style: AppTextStyles.bodySecondary.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
+                            Icon(
+                              isAgricultor 
+                                  ? Icons.agriculture 
+                                  : Icons.shopping_bag,
+                              size: 16,
+                              color: AppColors.primaryGreen,
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              '(47 valoraciones)',
+                              isAgricultor ? 'Agricultor' : 'Comprador',
                               style: AppTextStyles.bodySecondary.copyWith(
-                                fontSize: 12,
+                                color: AppColors.primaryGreen,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
@@ -131,201 +145,210 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
 
-                  OutlinedButton(
-                    onPressed: () {},
-                    style: AppButtonStyles.secondary,
-                    child: Text(
-                      'Editar',
-                      style: AppTextStyles.body.copyWith(
-                        color: AppColors.primaryGreen,
-                      ),
+                  // Botón de editar perfil
+                  IconButton(
+                    icon: const Icon(
+                      Icons.edit_outlined,
+                      color: AppColors.primaryGreen,
                     ),
+                    onPressed: () {
+                      // TODO: Navegar a editar perfil
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Función en desarrollo'),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
 
-            if (isAgricultor) ...[
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _buildStatCard(
-                        icon: Icons.inventory_2_outlined,
-                        value: '28',
-                        label: 'Productos',
-                        color: AppColors.primaryGreen,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildStatCard(
-                        icon: Icons.shopping_bag_outlined,
-                        value: '156',
-                        label: 'Ventas',
-                        color: Colors.blue,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _buildStatCard(
-                        icon: Icons.favorite_border,
-                        value: '89',
-                        label: 'Seguidores',
-                        color: Colors.red,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-            ],
-
+            // Switch de rol (Agricultor/Comprador)
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      'Acciones rápidas',
-                      style: AppTextStyles.body.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Icon(
+                    isAgricultor 
+                        ? Icons.agriculture 
+                        : Icons.shopping_bag,
+                    color: AppColors.primaryGreen,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Cambiar modo',
+                          style: AppTextStyles.body.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Text(
+                          'Alterna entre agricultor y comprador',
+                          style: AppTextStyles.bodySecondary,
+                        ),
+                      ],
                     ),
                   ),
-                  _buildActionTile(
-                    icon: Icons.add_circle_outline,
-                    title: isAgricultor ? 'Publicar cosecha' : 'Buscar productos',
-                    onTap: () {
-                      if (isAgricultor) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AddProductScreen(),
+                  Switch(
+                    value: isAgricultor,
+                    onChanged: (value) {
+                      userService.toggleRole();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            value
+                                ? '🌾 Cambiado a modo Agricultor'
+                                : '🛒 Cambiado a modo Comprador',
                           ),
-                        );
-                      } else {
-                        widget.onNavigateToMap?.call();
-                      }
+                          backgroundColor: AppColors.primaryGreen,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
                     },
-                  ),
-                  _buildActionTile(
-                    icon: Icons.inventory_2_outlined,
-                    title: isAgricultor ? 'Gestionar productos' : 'Mis pedidos',
-                    onTap: () {
-                      if (isAgricultor) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MyProductsScreen(),
-                          ),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MyOrdersScreen(),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                  _buildActionTile(
-                    icon: Icons.star_outline,
-                    title: 'Ver valoraciones',
-                    onTap: () {},
-                  ),
-                  _buildActionTile(
-                    icon: Icons.history,
-                    title: isAgricultor ? 'Historial de ventas' : 'Historial de compras',
-                    onTap: () {
-                      if (isAgricultor) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ReceivedOrdersScreen(),
-                          ),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MyOrdersScreen(),
-                          ),
-                        );
-                      }
-                    },
-                    showDivider: false,
+                    activeColor: AppColors.primaryGreen,
                   ),
                 ],
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
+
+            // Opciones del perfil
+            if (isAgricultor) ...[
+              // Opciones de Agricultor
+              _buildProfileOption(
+                context,
+                icon: Icons.inventory_2_outlined,
+                title: 'Mis Productos',
+                subtitle: 'Gestiona tu inventario',
+                onTap: () {
+                  // TODO: Navegar a mis productos
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Función en desarrollo')),
+                  );
+                },
+              ),
+              _buildProfileOption(
+                context,
+                icon: Icons.add_circle_outline,
+                title: 'Añadir Producto',
+                subtitle: 'Publica un nuevo producto',
+                onTap: () {
+                  // TODO: Navegar a añadir producto
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Función en desarrollo')),
+                  );
+                },
+              ),
+              _buildProfileOption(
+                context,
+                icon: Icons.receipt_long_outlined,
+                title: 'Pedidos Recibidos',
+                subtitle: 'Ver pedidos de compradores',
+                onTap: () {
+                  // TODO: Navegar a pedidos recibidos
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Función en desarrollo')),
+                  );
+                },
+              ),
+            ] else ...[
+              // Opciones de Comprador
+              _buildProfileOption(
+                context,
+                icon: Icons.map_outlined,
+                title: 'Explorar Productos',
+                subtitle: 'Encuentra productos cerca de ti',
+                onTap: widget.onNavigateToMap ?? () {},
+              ),
+              _buildProfileOption(
+                context,
+                icon: Icons.shopping_bag_outlined,
+                title: 'Mis Pedidos',
+                subtitle: 'Ver historial de compras',
+                onTap: () {
+                  // TODO: Navegar a mis pedidos
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Función en desarrollo')),
+                  );
+                },
+              ),
+              _buildProfileOption(
+                context,
+                icon: Icons.favorite_outline,
+                title: 'Favoritos',
+                subtitle: 'Productos guardados',
+                onTap: () {
+                  // TODO: Navegar a favoritos
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Función en desarrollo')),
+                  );
+                },
+              ),
+            ],
+
+            const SizedBox(height: 24),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatCard({
-    required IconData icon,
-    required String value,
-    required String label,
-    required Color color,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: 28),
-          const SizedBox(height: 8),
-          Text(
-            value,
-            style: AppTextStyles.headline,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: AppTextStyles.bodySecondary.copyWith(
-              fontSize: 12,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionTile({
+  /// Widget helper para construir opciones del perfil
+  Widget _buildProfileOption(
+    BuildContext context, {
     required IconData icon,
     required String title,
+    required String subtitle,
     required VoidCallback onTap,
-    bool showDivider = true,
   }) {
-    return Column(
-      children: [
-        ListTile(
-          leading: Icon(icon, color: AppColors.primaryGreen),
-          title: Text(title, style: AppTextStyles.body),
-          trailing: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
-          onTap: onTap,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ListTile(
+        leading: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: AppColors.lightGreen.withOpacity(0.3),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(
+            icon,
+            color: AppColors.primaryGreen,
+            size: 24,
+          ),
         ),
-        if (showDivider)
-          Divider(height: 1, color: AppColors.border, indent: 56),
-      ],
+        title: Text(
+          title,
+          style: AppTextStyles.body.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        subtitle: Text(
+          subtitle,
+          style: AppTextStyles.bodySecondary,
+        ),
+        trailing: const Icon(
+          Icons.chevron_right,
+          color: AppColors.textSecondary,
+        ),
+        onTap: onTap,
+      ),
     );
   }
 }

@@ -1,4 +1,4 @@
-// lib/screens/checkout_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:rural_roots_demo1/services/cart_service.dart';
 import 'package:rural_roots_demo1/themes/app_buttons_styles.dart';
@@ -97,7 +97,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final grouped = _cartService;
+    final grouped = _cartService.groupByFarmer();
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -178,7 +178,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      '${item.quantity}x ${item.productName}',
+                                      '${item.quantity}x ${item.product}',
                                       style: AppTextStyles.bodySecondary,
                                     ),
                                     Text(

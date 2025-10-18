@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:rural_roots_demo1/core/utils/currency_formater.dart';
 import '../../../services/cart_service.dart';
 import '../../../themes/app_colors.dart';
 import '../../../themes/app_text_styles.dart';
 import '../../../themes/app_decorations.dart';
-import '../../../core/utils/currency_formatter.dart';
 import 'cart_item_widget.dart';
 
 class FarmerGroupWidget extends StatelessWidget {

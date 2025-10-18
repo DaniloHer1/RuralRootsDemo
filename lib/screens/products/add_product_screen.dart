@@ -152,7 +152,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
     if (mounted) {
       // Aquí guardarías el producto en tu backend
-      print('📦 Producto publicado:');
+      print('   Producto publicado:');
       print('   Nombre: ${_nameController.text}');
       print('   Categoría: $_selectedCategory');
       print('   Precio: ${_priceController.text}€/$_selectedUnit');

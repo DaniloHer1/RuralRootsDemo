@@ -1,10 +1,11 @@
-// lib/screens/settings_screen.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart'; 
+import 'package:rural_roots_demo1/core/constants/app_constants.dart';
 import 'package:rural_roots_demo1/services/user_service.dart';
-import 'package:rural_roots_demo1/themes/app_buttons_styles.dart';
 import 'package:rural_roots_demo1/themes/app_colors.dart';
 import 'package:rural_roots_demo1/themes/app_text_styles.dart';
-import '../../models/user_rol.dart';
+import 'package:rural_roots_demo1/themes/app_buttons_styles.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -14,25 +15,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final UserService _userService = UserService();
+  bool _notificationsEnabled = true;
   bool _darkMode = false;
-  bool _notifications = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _userService.addListener(_onUserChanged);
-  }
-
-  @override
-  void dispose() {
-    _userService.removeListener(_onUserChanged);
-    super.dispose();
-  }
-
-  void _onUserChanged() {
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +27,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         elevation: 0,
         title: Text(
           'Ajustes',
-          style: AppTextStyles.subheadline,
+          style: AppTextStyles.headline.copyWith(
+            fontSize: 20,
+            color: AppColors.textPrimary,
+          ),
         ),
         centerTitle: true,
       ),
@@ -51,8 +38,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 8),
+            const SizedBox(height: 16),
 
+            // Sección: Cuenta
             _buildSectionHeader('Cuenta'),
             Container(
               color: AppColors.white,
@@ -60,55 +48,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   _buildSettingTile(
                     icon: Icons.person_outline,
-                    title: 'Información personal',
-                    onTap: () {},
+                    title: 'Editar perfil',
+                    onTap: () {
+                      // TODO: Navegar a pantalla de edición de perfil
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Función en desarrollo')),
+                      );
+                    },
                   ),
                   _buildDivider(),
                   _buildSettingTile(
                     icon: Icons.lock_outline,
-                    title: 'Privacidad y seguridad',
-                    onTap: () {},
+                    title: 'Cambiar contraseña',
+                    onTap: () {
+                      // TODO: Navegar a pantalla de cambio de contraseña
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Función en desarrollo')),
+                      );
+                    },
                   ),
                   _buildDivider(),
                   _buildSettingTile(
                     icon: Icons.payment,
                     title: 'Métodos de pago',
-                    onTap: () {},
-                  ),
-                  _buildDivider(),
-                  ListTile(
-                    leading: Icon(
-                      _userService.isAgricultor ? Icons.agriculture : Icons.shopping_bag,
-                      color: AppColors.primaryGreen,
-                    ),
-                    title: Text('Modo', style: AppTextStyles.body),
-                    subtitle: Text(
-                      _userService.isAgricultor ? 'Agricultor' : 'Comprador',
-                      style: AppTextStyles.bodySecondary.copyWith(
-                        color: AppColors.primaryGreen,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    trailing: Switch(
-                      value: _userService.isAgricultor,
-                      onChanged: (value) {
-                        _userService.setRole(
-                          value ? UserRole.agricultor : UserRole.comprador,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              value
-                                  ? '🌾 Cambiado a modo Agricultor'
-                                  : '🛒 Cambiado a modo Comprador',
-                            ),
-                            backgroundColor: AppColors.primaryGreen,
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
-                      },
-                      activeThumbColor: AppColors.primaryGreen,
-                    ),
+                    onTap: () {
+                      // TODO: Navegar a métodos de pago
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Función en desarrollo')),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -116,19 +84,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             const SizedBox(height: 24),
 
+            // Sección: Preferencias
             _buildSectionHeader('Preferencias'),
             Container(
               color: AppColors.white,
               child: Column(
                 children: [
                   ListTile(
-                    leading: const Icon(Icons.notifications_outlined, color: AppColors.textPrimary),
+                    leading: const Icon(
+                      Icons.notifications_outlined,
+                      color: AppColors.textPrimary,
+                    ),
                     title: Text('Notificaciones', style: AppTextStyles.body),
                     trailing: Switch(
-                      value: _notifications,
+                      value: _notificationsEnabled,
                       onChanged: (value) {
                         setState(() {
-                          _notifications = value;
+                          _notificationsEnabled = value;
                         });
                       },
                       activeThumbColor: AppColors.primaryGreen,
@@ -136,7 +108,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   _buildDivider(),
                   ListTile(
-                    leading: const Icon(Icons.dark_mode_outlined, color: AppColors.textPrimary),
+                    leading: const Icon(
+                      Icons.dark_mode_outlined,
+                      color: AppColors.textPrimary,
+                    ),
                     title: Text('Modo oscuro', style: AppTextStyles.body),
                     trailing: Switch(
                       value: _darkMode,
@@ -144,6 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         setState(() {
                           _darkMode = value;
                         });
+                        // TODO: Implementar cambio de tema
                       },
                       activeThumbColor: AppColors.primaryGreen,
                     ),
@@ -153,7 +129,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     icon: Icons.language,
                     title: 'Idioma',
                     subtitle: 'Español',
-                    onTap: () {},
+                    onTap: () {
+                      // TODO: Mostrar selector de idioma
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Función en desarrollo')),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -161,6 +142,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             const SizedBox(height: 24),
 
+            // Sección: Soporte
             _buildSectionHeader('Soporte'),
             Container(
               color: AppColors.white,
@@ -169,13 +151,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _buildSettingTile(
                     icon: Icons.help_outline,
                     title: 'Centro de ayuda',
-                    onTap: () {},
+                    onTap: () {
+                      // TODO: Abrir centro de ayuda
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Función en desarrollo')),
+                      );
+                    },
                   ),
                   _buildDivider(),
                   _buildSettingTile(
                     icon: Icons.email_outlined,
                     title: 'Contactar soporte',
-                    onTap: () {},
+                    onTap: () {
+                      // TODO: Abrir email o chat de soporte
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Función en desarrollo')),
+                      );
+                    },
+                  ),
+                  _buildDivider(),
+                  _buildSettingTile(
+                    icon: Icons.privacy_tip_outlined,
+                    title: 'Política de privacidad',
+                    onTap: () {
+                      // TODO: Mostrar política de privacidad
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Función en desarrollo')),
+                      );
+                    },
+                  ),
+                  _buildDivider(),
+                  _buildSettingTile(
+                    icon: Icons.description_outlined,
+                    title: 'Términos y condiciones',
+                    onTap: () {
+                      // TODO: Mostrar términos y condiciones
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Función en desarrollo')),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -183,48 +197,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             const SizedBox(height: 24),
 
+            // Botón de cerrar sesión
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: SizedBox(
                 width: double.infinity,
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text('Cerrar sesión', style: AppTextStyles.subheadline),
-                        content: Text(
-                          '¿Estás seguro de que quieres cerrar sesión?',
-                          style: AppTextStyles.body,
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: Text(
-                              'Cancelar',
-                              style: AppTextStyles.body.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                '/login',
-                                (route) => false,
-                              );
-                            },
-                            child: Text(
-                              'Cerrar sesión',
-                              style: AppTextStyles.body.copyWith(
-                                color: Colors.red,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                    _showLogoutDialog(context);
                   },
                   icon: const Icon(Icons.logout, color: Colors.red),
                   label: Text(
@@ -235,7 +215,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                   style: AppButtonStyles.secondary.copyWith(
-                    side: const WidgetStatePropertyAll(BorderSide(color: Colors.red)),
+                    side: const WidgetStatePropertyAll(
+                      BorderSide(color: Colors.red),
+                    ),
                     foregroundColor: const WidgetStatePropertyAll(Colors.red),
                     padding: const WidgetStatePropertyAll(
                       EdgeInsets.symmetric(vertical: 14),
@@ -247,9 +229,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             const SizedBox(height: 16),
 
+            // Versión de la app
             Center(
               child: Text(
-                'Versión 1.0.0',
+                'Versión ${AppConstants.appVersion}',
                 style: AppTextStyles.bodySecondary.copyWith(
                   fontSize: 12,
                 ),
@@ -263,6 +246,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  /// Muestra un diálogo de confirmación para cerrar sesión
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text('Cerrar sesión', style: AppTextStyles.subheadline),
+        content: Text(
+          '¿Estás seguro de que quieres cerrar sesión?',
+          style: AppTextStyles.body,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(
+              'Cancelar',
+              style: AppTextStyles.body.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              // Cerrar el diálogo
+              Navigator.pop(dialogContext);
+              
+              // Limpiar el estado del usuario
+              context.read<UserService>().logout();
+              
+              
+              context.go('/login');
+            },
+            child: Text(
+              'Cerrar sesión',
+              style: AppTextStyles.body.copyWith(
+                color: Colors.red,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Construye el encabezado de una sección
   Widget _buildSectionHeader(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -276,26 +303,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
+  /// Construye un item de configuración
   Widget _buildSettingTile({
     required IconData icon,
     required String title,
     String? subtitle,
-    required VoidCallback onTap,
+    VoidCallback? onTap,
   }) {
     return ListTile(
       leading: Icon(icon, color: AppColors.textPrimary),
       title: Text(title, style: AppTextStyles.body),
-      subtitle: subtitle != null ? Text(subtitle, style: AppTextStyles.bodySecondary) : null,
-      trailing: const Icon(Icons.chevron_right, color: AppColors.textSecondary),
+      subtitle: subtitle != null
+          ? Text(subtitle, style: AppTextStyles.bodySecondary)
+          : null,
+      trailing: const Icon(
+        Icons.chevron_right,
+        color: AppColors.textSecondary,
+      ),
       onTap: onTap,
     );
   }
 
+  /// Construye un divider entre items
   Widget _buildDivider() {
-    return Divider(
+    return const Divider(
       height: 1,
-      indent: 56,
+      thickness: 1,
       color: AppColors.border,
+      indent: 56,
     );
   }
 }
