@@ -1,6 +1,6 @@
 // lib/screens/chat_screen.dart
 import 'package:flutter/material.dart';
-import 'package:rural_roots_demo1/screens/chat_conversation_screen.dart';
+import 'package:rural_roots_demo1/screens/chat/chat_conversation_screen.dart';
 import 'package:rural_roots_demo1/themes/app_colors.dart';
 import 'package:rural_roots_demo1/themes/app_text_styles.dart';
 

@@ -1,9 +1,9 @@
 // lib/screens/main_screen.dart
 import 'package:flutter/material.dart';
 import 'package:rural_roots_demo1/screens/profile_screen.dart';
-import 'package:rural_roots_demo1/screens/map_screen.dart';
-import 'package:rural_roots_demo1/screens/chat_screen.dart';
-import 'package:rural_roots_demo1/screens/setting_screen.dart';
+import 'package:rural_roots_demo1/screens/map/map_screen.dart';
+import 'package:rural_roots_demo1/screens/chat/chat_screen.dart';
+import 'package:rural_roots_demo1/screens/settings/setting_screen.dart';
 import 'package:rural_roots_demo1/services/user_service.dart';
 
 import 'package:rural_roots_demo1/themes/app_colors.dart';

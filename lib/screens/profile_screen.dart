@@ -1,10 +1,10 @@
 // lib/screens/profile_screen.dart
 import 'package:flutter/material.dart';
 import 'package:rural_roots_demo1/services/user_service.dart';
-import 'package:rural_roots_demo1/screens/add_product_screen.dart';
-import 'package:rural_roots_demo1/screens/my_products_screen.dart';
-import 'package:rural_roots_demo1/screens/my_orders_screen.dart';
-import 'package:rural_roots_demo1/screens/received_order_screen.dart';
+import 'package:rural_roots_demo1/screens/products/add_product_screen.dart';
+import 'package:rural_roots_demo1/screens/products/my_products_screen.dart';
+import 'package:rural_roots_demo1/screens/orders/my_orders_screen.dart';
+import 'package:rural_roots_demo1/screens/orders/received_order_screen.dart';
 import 'package:rural_roots_demo1/themes/app_buttons_styles.dart';
 import 'package:rural_roots_demo1/themes/app_colors.dart';
 import 'package:rural_roots_demo1/themes/app_text_styles.dart';

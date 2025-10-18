@@ -4,6 +4,7 @@ import 'package:rural_roots_demo1/services/user_service.dart';
 import 'package:rural_roots_demo1/themes/app_buttons_styles.dart';
 import 'package:rural_roots_demo1/themes/app_colors.dart';
 import 'package:rural_roots_demo1/themes/app_text_styles.dart';
+import '../../models/user_rol.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -106,7 +107,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         );
                       },
-                      activeColor: AppColors.primaryGreen,
+                      activeThumbColor: AppColors.primaryGreen,
                     ),
                   ),
                 ],
@@ -130,7 +131,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           _notifications = value;
                         });
                       },
-                      activeColor: AppColors.primaryGreen,
+                      activeThumbColor: AppColors.primaryGreen,
                     ),
                   ),
                   _buildDivider(),
@@ -144,7 +145,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           _darkMode = value;
                         });
                       },
-                      activeColor: AppColors.primaryGreen,
+                      activeThumbColor: AppColors.primaryGreen,
                     ),
                   ),
                   _buildDivider(),

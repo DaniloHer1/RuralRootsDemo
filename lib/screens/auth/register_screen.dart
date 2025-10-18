@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rural_roots_demo1/screens/phone_verification_screen.dart';
+import 'package:rural_roots_demo1/screens/auth/phone_verification_screen.dart';
 
 import 'package:rural_roots_demo1/themes/app_buttons_styles.dart';
 import 'package:rural_roots_demo1/themes/app_colors.dart';
@@ -186,15 +186,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     borderSide: const BorderSide(color: Colors.red),
                                   ),
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.trim().isEmpty) {
-                                    return 'Por favor ingresa tu email';
-                                  }
-                                  if (!value.contains('@')) {
-                                    return 'Email inválido';
-                                  }
-                                  return null;
-                                },
+                              validator: (value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Por favor ingresa tu email';
+    }
+    
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    );
+    if (!emailRegex.hasMatch(value)) {
+      return 'Email inválido';
+    }
+    return null;
+  },
                               ),
                               const SizedBox(height: 16),
 

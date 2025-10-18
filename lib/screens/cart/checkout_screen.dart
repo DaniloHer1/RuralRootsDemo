@@ -97,7 +97,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final grouped = _cartService.groupByFarmer();
+    final grouped = _cartService;
 
     return Scaffold(
       backgroundColor: AppColors.background,

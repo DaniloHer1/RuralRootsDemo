@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:rural_roots_demo1/screens/chat_conversation_screen.dart';
-import 'package:rural_roots_demo1/screens/cart_screen.dart';
+import 'package:rural_roots_demo1/screens/chat/chat_conversation_screen.dart';
+import 'package:rural_roots_demo1/screens/cart/cart_screen.dart';
 import 'package:rural_roots_demo1/services/cart_service.dart';
 import 'package:rural_roots_demo1/services/user_service.dart';
 import 'package:rural_roots_demo1/themes/app_buttons_styles.dart';

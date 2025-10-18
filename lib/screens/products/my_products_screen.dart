@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rural_roots_demo1/screens/add_product_screen.dart';
+import 'package:rural_roots_demo1/screens/products/add_product_screen.dart';
 import 'package:rural_roots_demo1/themes/app_colors.dart';
 import 'package:rural_roots_demo1/themes/app_text_styles.dart';
 
